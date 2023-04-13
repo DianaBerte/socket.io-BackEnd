@@ -19,4 +19,13 @@ export const newConnectionHandler = socket => {
         //2.3 informing everyone else about the newly connected user:
         socket.broadcast.emit("updateOnlineUsersList", onlineUsers)
     })
+
+    socket.on("message", (message) => {
+        socket.broadcast.emit("newMessage", message)
+    })
+
+    socket.on("disconnect", () => {
+        onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id)
+        socket.broadcast.emit("updateOnlineUsersList", onlineUsers)
+    })
 }
